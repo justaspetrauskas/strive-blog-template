@@ -13,3 +13,8 @@
   text-decoration: none;
   color: inherit;
 }
+.post-options-btn {
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}

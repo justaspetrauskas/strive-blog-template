@@ -32,10 +32,7 @@ export default class NewBlogPost extends Component {
         },
       });
       if (response.ok) {
-        console.log("post was submitted");
-        {
-          this.props.fetchComments();
-        }
+        this.props.fetchComments();
       }
     } catch (error) {
       console.log(error);
