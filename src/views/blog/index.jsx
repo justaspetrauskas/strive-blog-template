@@ -15,7 +15,9 @@ class Blog extends Component {
 
   fetchSinglePost = async (postId) => {
     try {
-      let response = await fetch(`http://localhost:3001/blogPosts/${postId}`);
+      let response = await fetch(
+        `${process.env.REACT_APP_LOCAL_HOST}/${postId}`
+      );
       if (response.ok) {
         let singlePost = await response.json();
         this.setState({
@@ -30,10 +32,11 @@ class Blog extends Component {
     }
   };
 
-  handleDelete = async () => {
+  handleDelete = async (e) => {
+    e.preventDefault();
     try {
       let response = await fetch(
-        `http://localhost:3001/blogPosts/${this.state.post._id}`,
+        `${process.env.REACT_APP_LOCAL_HOST}/${this.state.post._id}`,
         {
           method: "DELETE",
         }
@@ -79,6 +82,12 @@ class Blog extends Component {
 
             <div dangerouslySetInnerHTML={{ __html: post.content }}></div>
             <div className="post-options-btn">
+              <a
+                href={`${process.env.REACT_APP_LOCAL_HOST}/${this.state.post._id}/pdf`}
+                className="post-option-btn download-pdf"
+              >
+                Download as pdf
+              </a>
               <Link to={`/blog/edit/${post._id}`}>
                 <button className="post-option-btn" /*onClick={handleEdit}*/>
                   Edit

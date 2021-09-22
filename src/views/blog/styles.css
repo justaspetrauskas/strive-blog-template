@@ -41,6 +41,8 @@
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
 }
 .post-option-btn {
   border: 1px solid rgba(0, 0, 0, 0.08);
@@ -57,4 +59,8 @@
 .post-option-btn:hover {
   background-color: rgba(0, 0, 0, 0.05);
   color: rgba(0, 0, 0, 0.8);
+}
+.download-pdf {
+  margin-right: auto;
+  margin-left: 0;
 }

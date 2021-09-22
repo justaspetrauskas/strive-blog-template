@@ -18,13 +18,14 @@ export default class NewBlogPost extends Component {
         avatar: "",
       },
       content: "",
+      coverURL: "",
     },
   };
 
   sendPost = async (e) => {
     e.preventDefault();
     try {
-      let response = await fetch(`http://localhost:3001/blogPosts`, {
+      let response = await fetch(process.env.REACT_APP_LOCAL_HOST, {
         method: "POST",
         body: JSON.stringify(this.state.post),
         headers: {
@@ -32,7 +33,24 @@ export default class NewBlogPost extends Component {
         },
       });
       if (response.ok) {
-        this.props.fetchComments();
+        const newPost = await response.json();
+        const newPostId = newPost.newPost._id;
+        try {
+          const formData = new FormData();
+          formData.append("cover", this.state.post.coverURL);
+          const response = await fetch(
+            process.env.REACT_APP_LOCAL_HOST + `/${newPostId}/coverImage`,
+            {
+              method: "POST",
+              body: formData,
+            }
+          );
+          if (response.ok) {
+            console.log("it worked");
+          }
+        } catch (error) {
+          console.log(error);
+        }
       }
     } catch (error) {
       console.log(error);
@@ -70,7 +88,7 @@ export default class NewBlogPost extends Component {
               onChange={(e) =>
                 this.setState({
                   post: {
-                    ...this.state.post.title,
+                    ...this.state.post,
                     title: e.target.value,
                   },
                 })
@@ -86,6 +104,7 @@ export default class NewBlogPost extends Component {
               onChange={(e) =>
                 this.setState({
                   post: {
+                    ...this.state.post,
                     category: e.target.value,
                   },
                 })
@@ -98,11 +117,26 @@ export default class NewBlogPost extends Component {
               <option>Category5</option>
             </Form.Control>
           </Form.Group>
+          <Form.Group controlId="blog-image" className="mt-3">
+            <Form.Label>Cover Image</Form.Label>
+            <Form.Control
+              onChange={(e) => {
+                const file = e.target.files[0];
+                this.setState({ post: { ...this.state.post, coverURL: file } });
+              }}
+              accept="image/*"
+              type="file"
+              placeholder="Image"
+              // required
+            />
+          </Form.Group>
           <Form.Group controlId="blog-content" className="mt-3">
             <Form.Label>Blog Content</Form.Label>
             <ReactQuill
               value={this.state.post.content}
-              onChange={(e) => this.setState({ post: { content: e } })}
+              onChange={(e) =>
+                this.setState({ post: { ...this.state.post, content: e } })
+              }
               className="new-blog-content"
             />
           </Form.Group>
