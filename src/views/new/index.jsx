@@ -24,7 +24,7 @@ export default class NewBlogPost extends Component {
 
   sendPost = async (e) => {
     e.preventDefault();
-    console.log(process.env.REACT_APP_LOCAL_HOST);
+    alert(process.env.REACT_APP_LOCAL_HOST);
     try {
       let response = await fetch(process.env.REACT_APP_LOCAL_HOST, {
         method: "POST",
